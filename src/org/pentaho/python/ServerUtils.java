@@ -562,10 +562,9 @@ public class ServerUtils {
     RowMetaAndRows rowMetaAndRows = new RowMetaAndRows();
     rowMetaAndRows.m_rowMeta = kettleMeta;
     rowMetaAndRows.m_rows = new Object[numRows][];
-    BufferedReader reader = new BufferedReader( new StringReader( csv ) );
-    String line;
     int count = 0;
-    while ( ( line = reader.readLine() ) != null ) {
+    for(String line: csv.split("#\\|\\|#")){
+      line = line.replace("\r\n", "<newline>");
       String[] parsed = PARSER.parseLine( line );
 
       Object[] row = new Object[kettleMeta.size()];
