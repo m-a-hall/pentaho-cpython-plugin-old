@@ -563,8 +563,10 @@ public class ServerUtils {
     rowMetaAndRows.m_rowMeta = kettleMeta;
     rowMetaAndRows.m_rows = new Object[numRows][];
     int count = 0;
+    // use a foreign line ending so that we can still have cr/lf in text cells
     for(String line: csv.split("#\\|\\|#")){
-      line = line.replace("\r\n", "<newline>");
+      // stash cr and lf so that they don't break the parser
+      line = line.replace("\n", "<lf>").replace("\r", "<cr>");
       String[] parsed = PARSER.parseLine( line );
 
       Object[] row = new Object[kettleMeta.size()];
@@ -591,7 +593,8 @@ public class ServerUtils {
             }
             break;
           default:
-            row[i] = parsed[i];
+            // unpack stashed cr lf 
+            row[i] = parsed[i].replace("<lf>", "\n").replace("<cr>", "\r");
         }
       }
       rowMetaAndRows.m_rows[count++] = row;
