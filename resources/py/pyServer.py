@@ -220,7 +220,7 @@ def send_response(response, isJson):
         response = json.dumps(response)
 
     if _global_python3 is True:
-        _global_connection.sendall(struct.pack('>L', len(response)))
+        _global_connection.sendall(struct.pack('>L', len(response.encode('utf-8'))))
         _global_connection.sendall(response.encode('utf-8'))
     else:
         _global_connection.sendall(struct.pack('>L', len(response)))
